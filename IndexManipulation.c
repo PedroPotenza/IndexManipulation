@@ -68,10 +68,9 @@ int main(int argc, char const *argv[])
     printf(" (3) -> Busca Secundaria\n");
     printf(" (4) -> Sair\n");
     
-    int option, repeat, inserted = true;
-    while(repeat)
+    int option, repeat = 1, inserted = 0;
+    while(repeat != 0)
     {
-
         printf("\n\nOpcao: ");
         scanf("%d", &option);
 
@@ -80,7 +79,10 @@ int main(int argc, char const *argv[])
         case 1:
             
             inserted = Insert(insertData[inseridos]);
-            
+            if(inserted == 1){
+                inseridos++;
+                savePosition();
+            }
             break;
 
         case 2:
@@ -98,7 +100,7 @@ int main(int argc, char const *argv[])
         case 4:
             savePosition();
             printf("Finalizando...\n\n\n");
-            repeat = false;
+            repeat = 0;
             break;
         
         default:

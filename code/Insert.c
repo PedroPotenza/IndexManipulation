@@ -14,6 +14,11 @@ typedef struct s_Register {
 
 int Insert(REGISTER registerData)
 {
+    if(registerData.Id.ClientId == 0 || registerData.Id.MovieId == 0) {
+        printf("Registro nulo não inserido\n");
+        return 0;
+    }
+
     char divider = '#';
     
     FILE* resultFile;
