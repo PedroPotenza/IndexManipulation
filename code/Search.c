@@ -1,4 +1,5 @@
 #include "../header.h"
+
 void fields(char* string)
 {
 
@@ -8,10 +9,10 @@ void fields(char* string)
     printf("Nome do Cliente: %s\n", idk);
 
     idk = strtok(NULL,"#");
-    printf("Nome do Filme: %s\n\n", idk);
+    printf("Nome do Filme: %s\n", idk);
 
-    idk = strtok(NULL,"|");
-    printf("Genero: %s\n\n", idk);
+    idk = strtok(NULL,"!");
+    printf("Genero: %s\n", idk);
 }
 
 int PrintRegister(int adress)
@@ -38,11 +39,10 @@ int PrintRegister(int adress)
     printf("Codigo do Filme: %d\n", DataInt);
     fseek(resultFile, 1, SEEK_CUR);
 
-    stringSize = registerSize - 4 * sizeof(int) + 2 * sizeof(char);
+    stringSize = registerSize - 2 * sizeof(int) - 2 * sizeof(char);
 
-    char* string;
-    fread(&string, sizeof(char), stringSize, resultFile);
-
+    char string[stringSize];
+    fread(&string, stringSize, 1, resultFile);
     fields(string); 
 
     fclose(resultFile);
@@ -54,18 +54,25 @@ int PrimarySearch(KEY fileData)
     FILE* indexFile;
     KEY* readKey;
     int address;
-    
-    if(access("indexPrimaryResult.bin", F_OK ) == 0 ) {
-	    indexFile = fopen("indexPrimaryResult.bin", "r+b");
-	} else {
-	    indexFile = fopen("indexPrimaryResult.bin", "w+b");
-	}
+ 
+	indexFile = fopen("indexPrimaryResult.bin", "r+b");
 
-    fseek(indexFile, 0, SEEK_SET);
+    int valid = 1;
+    int ClientId, MovieId;
 
-    while(fread(readKey, sizeof(KEY), 1, indexFile)) {
-        if(readKey->ClientId == fileData.ClientId && readKey->MovieId == fileData.MovieId) {
+    printf("chave Cliente BUSCADA: %d \n", fileData.ClientId);
+    printf("chave Filme BUSCADA: %d \n\n", fileData.MovieId);
+
+    while(fread(&ClientId, sizeof(int), 1, indexFile)) {
+
+        fread(&MovieId, sizeof(int), 1, indexFile);
+
+        printf("chave Cliente INTERACAO: %d \n", ClientId);
+        printf("chave Filme INTERACAO: %d \n\n", MovieId);
+
+        if(ClientId == fileData.ClientId && MovieId == fileData.MovieId) {
             fread(&address, sizeof(int), 1, indexFile);
+            PrintRegister(address);
             return 1;
         } else {
             fseek(indexFile, sizeof(int), SEEK_CUR);
@@ -73,7 +80,7 @@ int PrimarySearch(KEY fileData)
     }
 
     fclose(indexFile);
-    PrintRegister(address);
+    printf("nao foi possivel localizar!\n");
     return 0;
 }
 
