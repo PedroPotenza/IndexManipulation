@@ -1,5 +1,25 @@
 #include "../header.h"
 
+typedef struct s_Key {
+    int ClientId;
+    int MovieId;
+} KEY;
+
+typedef struct s_Register {
+    KEY Id;
+    char ClientName[50];
+    char MovieName[50];
+    char Genre[50];
+} REGISTER;
+
+typedef enum s_Vetor_Position {
+
+    INSERIDOS = 0,
+    BUSCA_P,
+    BUSCA_S
+
+} VETOR_POSITION;
+
 int Insert(REGISTER registerData)
 {
     if(registerData.Id.ClientId == 0 || registerData.Id.MovieId == 0) {
@@ -25,11 +45,11 @@ int Insert(REGISTER registerData)
 
     fread(&offset, sizeof(int), 1, resultFile);
 
-    int registerAdress = findAdressToFit(offset, registerSize, resultFile);
+    int registerAdress = 0; //findAdressToFit(offset, registerSize, resultFile);
     if (registerAdress == -1)
         fseek(resultFile, 0, SEEK_END);
     else {
-        fseek(resultFile, registerAdress + sizeof(int) + 1 * sizeof(char), SEEK"_"SET);
+        fseek(resultFile, registerAdress + sizeof(int) + 1 * sizeof(char), SEEK_SET);
         int newOffset;
         fread(&newOffset, sizeof(int), 1, resultFile);
         rewind(resultFile);
