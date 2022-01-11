@@ -42,6 +42,7 @@ int Insert(REGISTER registerData)
     }
 
     char divider = '#';
+    char finalizer = '!';
     
     FILE* resultFile;
     
@@ -51,7 +52,7 @@ int Insert(REGISTER registerData)
 	    resultFile = fopen("dataResult.bin", "w+b");
 	}
 
-    int registerSize = 2 * sizeof(int) + strlen(registerData.ClientName) + strlen(registerData.MovieName) + strlen(registerData.Genre) + 4 * sizeof(char);
+    int registerSize = 2 * sizeof(int) + strlen(registerData.ClientName) + strlen(registerData.MovieName) + strlen(registerData.Genre) + 5 * sizeof(char);
 
     fseek(resultFile, 0, SEEK_END);
 
@@ -67,6 +68,7 @@ int Insert(REGISTER registerData)
     fwrite(&registerData.MovieName, 1, strlen(registerData.MovieName), resultFile);
     fwrite(&divider, 1, sizeof(divider), resultFile);
     fwrite(&registerData.Genre, 1, strlen(registerData.Genre), resultFile);
+    fwrite(&finalizer, 1, sizeof(divider), resultFile);
     printf("Registro adicionado no final do arquivo!\n");
 
     InsertIndex(registerData, offset);
