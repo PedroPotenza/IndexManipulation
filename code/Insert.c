@@ -37,7 +37,7 @@ int InsertIndex(REGISTER registerData, int offset)
 int Insert(REGISTER registerData)
 {
     if(registerData.Id.ClientId == 0 || registerData.Id.MovieId == 0) {
-        printf("Registro nulo não inserido\n");
+        printf("Registro nulo nao inserido\n");
         return 0;
     }
 

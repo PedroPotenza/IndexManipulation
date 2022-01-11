@@ -10,9 +10,9 @@
 #include <unistd.h>
 
 #include "code/Insert.c"
+#include "code/Print.c"
 #include "code/Util.c"
 #include "code/Search.c"
-#include "code/Print.c"
 
 // int inseridos = 0;
 // int buscas_primarias = 0;
@@ -34,6 +34,7 @@ int Insert(REGISTER registerData);
 int PrimarySearch(KEY fileData);
 
 int PrintRegister(int adress);
+void fields(char* string);
 
 FILE * readPositions();
 void savePosition();
