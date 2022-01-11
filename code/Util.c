@@ -26,7 +26,7 @@ FILE * readPositions() {
 	return file;
 }
 
-void increasePosition(VETOR_POSITION vetor) {
+void savePosition(int inseridos, int busca_p, int busca_s) {
 
     char * filename = "position.bin";
 	
@@ -34,7 +34,9 @@ void increasePosition(VETOR_POSITION vetor) {
 
     //fazer essa lógica ainda
 
-	fwrite(&ZERO, sizeof(short int), 1, file);
+	fwrite(&inseridos, sizeof(int), 1, file);
+	fwrite(&busca_p, sizeof(int), 1, file);
+	fwrite(&busca_s, sizeof(int), 1, file);
 	
 	return file;
 
