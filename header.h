@@ -12,9 +12,9 @@
 #include "code/Insert.c"
 #include "code/Util.c"
 
-int inseridos = 0;
-int buscas_primarias = 0;
-int buscas_secundarias = 0;
+// int inseridos = 0;
+// int buscas_primarias = 0;
+// int buscas_secundarias = 0;
 
 // typedef struct s_Key {
 //     int ClientId;
@@ -29,7 +29,9 @@ int buscas_secundarias = 0;
 // } REGISTER;
 
 int Insert(REGISTER registerData);
+
+
 FILE * readPositions();
-void increasePosition(int inseridos, int busca_p, int busca_s);
+void savePosition();
 
 #endif

@@ -56,9 +56,9 @@ int main(int argc, char const *argv[])
     fread(&buscas_secundarias, sizeof(int), 1, file);
 
     printf("\n---------- Contador Inicial ----------\n");
-    printf("\tRegistros inseridos: %hd\n", inseridos);
-    printf("\tBuscas Primarias: %hd\n", buscas_primarias);
-    printf("\tBuscas Secundarias: %hd\n\n", buscas_secundarias);
+    printf("\tRegistros inseridos: %d\n", inseridos);
+    printf("\tBuscas Primarias: %d\n", buscas_primarias);
+    printf("\tBuscas Secundarias: %d\n\n", buscas_secundarias);
 
     fclose(file);
 
@@ -96,6 +96,7 @@ int main(int argc, char const *argv[])
             break;
 
         case 4:
+            savePosition();
             printf("Finalizando...\n\n\n");
             repeat = false;
             break;
