@@ -37,8 +37,5 @@ void savePosition(int inseridos, int busca_p, int busca_s) {
 	fwrite(&inseridos, sizeof(int), 1, file);
 	fwrite(&busca_p, sizeof(int), 1, file);
 	fwrite(&busca_s, sizeof(int), 1, file);
-	
-	return file;
-
 }
 

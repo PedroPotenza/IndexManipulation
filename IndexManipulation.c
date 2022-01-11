@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     fclose(file);
 
     //carrega em memoria principal o vetor busca_p
-    FILE* file = fileOpenRead("busca_p.bin");
+    file = fileOpenRead("busca_p.bin");
 
     KEY* buscaPrimariaData;
     int buscaPrimariaSize = 15;
