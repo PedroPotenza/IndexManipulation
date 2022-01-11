@@ -30,7 +30,6 @@
 
 int Insert(REGISTER registerData);
 
-
 FILE * readPositions();
 void savePosition();
 

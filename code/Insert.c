@@ -12,6 +12,28 @@ typedef struct s_Register {
     char Genre[50];
 } REGISTER;
 
+int InsertIndex(REGISTER registerData, int offset)
+{
+    FILE* indexFile;
+    
+    if(access("indexPrimaryResult.bin", F_OK ) == 0 ) {
+	    indexFile = fopen("indexPrimaryResult.bin", "r+b");
+	} else {
+	    indexFile = fopen("indexPrimaryResult.bin", "w+b");
+	}
+
+    fseek(indexFile, 0, SEEK_END);
+
+    fwrite(&registerData.Id.ClientId, 1, sizeof(int), indexFile);
+    fwrite(&registerData.Id.MovieId, 1, sizeof(int), indexFile);
+    fwrite(&offset, 1, sizeof(int), indexFile);
+
+    printf("Indice adicionado no final do arquivo de indice!\n");
+
+    fclose(indexFile);
+    return 1;
+}
+
 int Insert(REGISTER registerData)
 {
     if(registerData.Id.ClientId == 0 || registerData.Id.MovieId == 0) {
@@ -33,6 +55,8 @@ int Insert(REGISTER registerData)
 
     fseek(resultFile, 0, SEEK_END);
 
+    int offset = ftell(resultFile);
+
     fwrite(&registerSize, 1, sizeof(int), resultFile);
     fwrite(&registerData.Id.ClientId, 1, sizeof(int), resultFile);
     fwrite(&divider, 1, sizeof(divider), resultFile);
@@ -43,8 +67,9 @@ int Insert(REGISTER registerData)
     fwrite(&registerData.MovieName, 1, strlen(registerData.MovieName), resultFile);
     fwrite(&divider, 1, sizeof(divider), resultFile);
     fwrite(&registerData.Genre, 1, strlen(registerData.Genre), resultFile);
+    printf("Registro adicionado no final do arquivo!\n");
 
-    printf("Registro adicionado no final do arquivo!");
+    InsertIndex(registerData, offset);
 
     fclose(resultFile);
     return 1;
