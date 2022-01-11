@@ -11,6 +11,7 @@
 
 #include "code/Insert.c"
 #include "code/Util.c"
+#include "code/Search.c"
 
 // int inseridos = 0;
 // int buscas_primarias = 0;
@@ -29,6 +30,7 @@
 // } REGISTER;
 
 int Insert(REGISTER registerData);
+int PrimarySearch(KEY fileData);
 
 FILE * readPositions();
 void savePosition();

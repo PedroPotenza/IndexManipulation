@@ -68,7 +68,7 @@ int main(int argc, char const *argv[])
     printf(" (3) -> Busca Secundaria\n");
     printf(" (4) -> Sair\n");
     
-    int option, repeat = 1, inserted = 0;
+    int option, repeat = 1, inserted = 0, found = 0;
     while(repeat != 0)
     {
         printf("\n\nOpcao: ");
@@ -86,9 +86,12 @@ int main(int argc, char const *argv[])
             break;
 
         case 2:
-            
-            //busca primaria
-            
+            found = PrimarySearch(buscaPrimariaData[buscas_primarias]);
+            if(found == 1){
+                buscas_primarias++;
+                savePosition();
+            }
+
             break;
 
         case 3:
