@@ -44,6 +44,7 @@ int InsertSecondaryIndex(REGISTER registerData)
     int achou = 0;
     int readMovieAuxiliarOffset = 0;
     int readMovieSecondaryOffset = 0;
+    int carlinhos = 0;
     int endListOffset = -1;
     
     int testeOffset = 99;
@@ -98,8 +99,16 @@ int InsertSecondaryIndex(REGISTER registerData)
         printf("Indice adicionado no final do arquivo de indice secundario!\n");
 
     } else {
+        fseek(indexFileAux, 0, SEEK_END);
+        carlinhos = ftell(indexFileAux); // -1??
+
+        fwrite(&registerData.Id.ClientId, 1, sizeof(int), indexFileAux);
+        fwrite(&registerData.Id.MovieId, 1, sizeof(int), indexFileAux);
+        fwrite(&readMovieAuxiliarOffset, 1, sizeof(int), indexFileAux);
+        printf("Indice adicionado no final do arquivo de indice auxiliar!\n");
+
         fseek(indexFile, readMovieSecondaryOffset + 50, SEEK_SET);
-        fwrite(&testeAuxOffset, 1, sizeof(int), indexFile);
+        fwrite(&carlinhos, 1, sizeof(int), indexFile);
 
         printf("Offset Atualizado!\n");
     }
