@@ -37,10 +37,15 @@ int InsertPrimaryIndex(REGISTER registerData, int offset)
 int InsertSecondaryIndex(REGISTER registerData)
 {
     FILE* indexFile;
+    FILE* indexFileAux;
+
     char readMovieName[50]; 
+    
     int achou = 0;
     int readMovieAuxiliarOffset = 0;
     int readMovieSecondaryOffset = 0;
+    int endListOffset = -1;
+    
     int testeOffset = 99;
     int testeAuxOffset = 11;
 
@@ -48,6 +53,12 @@ int InsertSecondaryIndex(REGISTER registerData)
 	    indexFile = fopen("indexSecondaryResult.bin", "r+b");
 	} else {
 	    indexFile = fopen("indexSecondaryResult.bin", "w+b");
+	}
+
+    if(access("indexAuxiliarResult.bin", F_OK ) == 0 ) {
+	    indexFileAux = fopen("indexAuxiliarResult.bin", "r+b");
+	} else {
+	    indexFileAux = fopen("indexAuxiliarResult.bin", "w+b");
 	}
 
     //printf("\nNome Filme BUSCADO: %s \n", registerData.MovieName);
@@ -59,7 +70,7 @@ int InsertSecondaryIndex(REGISTER registerData)
             achou = 1;
             fread(&readMovieAuxiliarOffset, sizeof(int), 1, indexFile);
             fseek(indexFile, -(sizeof(int) + sizeof(readMovieName)), SEEK_CUR);
-            readMovieSecondaryOffset = ftell(indexFile);
+            readMovieSecondaryOffset = ftell(indexFile); // -1??
             break;
     
         } else {
@@ -68,11 +79,24 @@ int InsertSecondaryIndex(REGISTER registerData)
     }
 
     if (achou == 0) {
+        //Move os arquivos pro final
         fseek(indexFile, 0, SEEK_END);
-        fwrite(&registerData.MovieName, 1, sizeof(readMovieName), indexFile);
-        fwrite(&testeOffset, 1, sizeof(int), indexFile);
+        fseek(indexFileAux, 0, SEEK_END);
 
+        //Salva o offset do aux
+        readMovieAuxiliarOffset = ftell(indexFileAux); // -1??
+
+        //Escreve os dados no aux
+        fwrite(&registerData.Id.ClientId, 1, sizeof(int), indexFileAux);
+        fwrite(&registerData.Id.MovieId, 1, sizeof(int), indexFileAux);
+        fwrite(&endListOffset, 1, sizeof(int), indexFileAux);
+        printf("Indice adicionado no final do arquivo de indice auxiliar!\n");
+        
+        //Escreve os dados no secondary
+        fwrite(&registerData.MovieName, 1, sizeof(readMovieName), indexFile);
+        fwrite(&readMovieAuxiliarOffset, 1, sizeof(int), indexFile);
         printf("Indice adicionado no final do arquivo de indice secundario!\n");
+
     } else {
         fseek(indexFile, readMovieSecondaryOffset + 50, SEEK_SET);
         fwrite(&testeAuxOffset, 1, sizeof(int), indexFile);
@@ -81,6 +105,7 @@ int InsertSecondaryIndex(REGISTER registerData)
     }
 
     fclose(indexFile);
+    fclose(indexFileAux);
     return 1;
 }
 
