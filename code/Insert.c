@@ -12,7 +12,7 @@ typedef struct s_Register {
     char Genre[50];
 } REGISTER;
 
-int InsertIndex(REGISTER registerData, int offset)
+int InsertPrimaryIndex(REGISTER registerData, int offset)
 {
     FILE* indexFile;
     
@@ -28,7 +28,57 @@ int InsertIndex(REGISTER registerData, int offset)
     fwrite(&registerData.Id.MovieId, 1, sizeof(int), indexFile);
     fwrite(&offset, 1, sizeof(int), indexFile);
 
-    printf("Indice adicionado no final do arquivo de indice!\n");
+    printf("Indice adicionado no final do arquivo de indice primario!\n");
+
+    fclose(indexFile);
+    return 1;
+}
+
+int InsertSecondaryIndex(REGISTER registerData)
+{
+    FILE* indexFile;
+    char readMovieName[50]; 
+    int achou = 0;
+    int readMovieAuxiliarOffset = 0;
+    int readMovieSecondaryOffset = 0;
+    int testeOffset = 99;
+    int testeAuxOffset = 11;
+
+    if(access("indexSecondaryResult.bin", F_OK ) == 0 ) {
+	    indexFile = fopen("indexSecondaryResult.bin", "r+b");
+	} else {
+	    indexFile = fopen("indexSecondaryResult.bin", "w+b");
+	}
+
+    //printf("\nNome Filme BUSCADO: %s \n", registerData.MovieName);
+
+    while(fread(&readMovieName, sizeof(char), 50, indexFile)) {
+        //printf("nome Filme INTERACAO: %s \n", readMovieName);
+
+        if (!strcmp(readMovieName, registerData.MovieName)) {
+            achou = 1;
+            fread(&readMovieAuxiliarOffset, sizeof(int), 1, indexFile);
+            fseek(indexFile, -(sizeof(int) + sizeof(readMovieName)), SEEK_CUR);
+            readMovieSecondaryOffset = ftell(indexFile);
+            break;
+    
+        } else {
+            fseek(indexFile, sizeof(int), SEEK_CUR);
+        }
+    }
+
+    if (achou == 0) {
+        fseek(indexFile, 0, SEEK_END);
+        fwrite(&registerData.MovieName, 1, sizeof(readMovieName), indexFile);
+        fwrite(&testeOffset, 1, sizeof(int), indexFile);
+
+        printf("Indice adicionado no final do arquivo de indice secundario!\n");
+    } else {
+        fseek(indexFile, readMovieSecondaryOffset + 50, SEEK_SET);
+        fwrite(&testeAuxOffset, 1, sizeof(int), indexFile);
+
+        printf("Offset Atualizado!\n");
+    }
 
     fclose(indexFile);
     return 1;
@@ -71,7 +121,8 @@ int Insert(REGISTER registerData)
     fwrite(&finalizer, 1, sizeof(divider), resultFile);
     printf("Registro adicionado no final do arquivo!\n");
 
-    InsertIndex(registerData, offset);
+    InsertPrimaryIndex(registerData, offset);
+    InsertSecondaryIndex(registerData);
 
     fclose(resultFile);
     return 1;

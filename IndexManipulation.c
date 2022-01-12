@@ -34,20 +34,17 @@ int main(int argc, char const *argv[])
 
     //carrega em memoria principal o vetor busca_s
 
-    /*
-        entender como é para receber isso
-    */
+    file = fileOpenRead("busca_s.bin");
 
-    // FILE* file = fileOpenRead("insere.bin");
+    int buscaSecundariaSize = 15;
+    char buscaSecundariaData[buscaSecundariaSize][50];
 
-    // char* buscaSecundariaData;
-    // int buscaSecundariaSize = 15;
-
-    // buscaSecundariaData = (REGISTER*) malloc(insertSize * sizeof(REGISTER));
-
-    // fread(buscaSecundariaData, sizeof(REGISTER), insertSize, file);
-    // fclose(file);
+    for (int i = 0; i < buscaSecundariaSize; i++)
+    {
+        fread(buscaSecundariaData[i], sizeof(char), 50, file);    
+    }
     
+    fclose(file);
 
     file = readPositions();
 
