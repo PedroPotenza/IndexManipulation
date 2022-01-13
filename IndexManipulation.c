@@ -783,7 +783,8 @@ int main(int argc, char const *argv[])
     printf(" (1) -> Inserir Registro\n");
     printf(" (2) -> Busca Primaria\n");
     printf(" (3) -> Busca Secundaria\n");
-    printf(" (4) -> Sair\n");
+    printf(" (4) -> Recriar e ordenar os indices\n");
+    printf(" (5) -> Sair\n");
     
     int option, repeat = 1, inserted = 0, found = 0;
     while(repeat != 0)
@@ -819,6 +820,12 @@ int main(int argc, char const *argv[])
             break;
 
         case 4:
+            
+            CreateIndexs();
+            
+            break;
+
+        case 5:
             savePosition();
             RefreshFiles();
 
