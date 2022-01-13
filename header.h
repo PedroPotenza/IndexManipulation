@@ -1,13 +1,6 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-#define true 1;
-#define false 0;
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 #include "code/Insert.c"
 #include "code/Print.c"
@@ -29,17 +22,5 @@
 //     char MovieName[50];
 //     char Genre[50];
 // } REGISTER;
-
-int Insert(REGISTER registerData);
-int PrimarySearch(KEY fileData);
-
-int PrintRegister(int adress);
-void fields(char* string);
-
-FILE * readPositions();
-void savePosition();
-
-void LoadVetors();
-void CreateIndexs(); 
 
 #endif
