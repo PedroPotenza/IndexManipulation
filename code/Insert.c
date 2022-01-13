@@ -1,5 +1,6 @@
 #include "../header.h"
 
+
 typedef struct s_Key {
     int ClientId;
     int MovieId;
@@ -13,18 +14,26 @@ typedef struct s_Register {
 } REGISTER;
 
 typedef struct s_IndexKey {
-
     KEY Id;
     int offset;
 
 } INDEX_KEY;
 
 typedef struct s_IndexName {
-
     char movieName[50];
     int offset;
 
-}   INDEX_NAME;
+} INDEX_NAME;
+
+INDEX_KEY vetorIndicePrincipal[15];
+INDEX_NAME vetorIndiceSecundario[15];
+INDEX_KEY vetorIndiceAuxiliar[15];
+
+int countIndicePrincipal = 0;
+int countIndiceSecundario = 0;
+int countIndiceAuxiliar = 0;
+
+char valid = '$';
 
 int InsertPrimaryIndex(REGISTER registerData, int offset)
 {
@@ -137,7 +146,6 @@ int Insert(REGISTER registerData)
     char divider = '#';
     char finalizer = '!';
 
-    char valid = '$';
     char invalid = '*';
     
     FILE* resultFile;
@@ -168,9 +176,98 @@ int Insert(REGISTER registerData)
     fwrite(&finalizer, 1, sizeof(divider), resultFile);
     printf("Registro adicionado no final do arquivo!\n");
 
-    InsertPrimaryIndex(registerData, offset);
-    InsertSecondaryIndex(registerData);
+    vetorIndicePrincipal[countIndicePrincipal].Id.ClientId = registerData.Id.ClientId;
+    vetorIndicePrincipal[countIndicePrincipal].Id.MovieId = registerData.Id.MovieId;
+    vetorIndicePrincipal[countIndicePrincipal].offset = offset;
+    countIndicePrincipal++;
+
+    printf("Indice adicionado no final do vetor de indice primario!\n");
+    
+    int achou = 0;
+    int old_offset;
+
+    for (int i = 0; i < countIndiceSecundario; i++) {
+        if(strcmp(vetorIndiceSecundario[i].movieName, registerData.MovieName) == 0) {
+            achou = 1;
+            old_offset = vetorIndiceSecundario[i].offset;
+            
+            vetorIndiceAuxiliar[countIndiceAuxiliar].Id.ClientId = registerData.Id.ClientId;
+            vetorIndiceAuxiliar[countIndiceAuxiliar].Id.MovieId = registerData.Id.MovieId;
+            vetorIndiceAuxiliar[countIndiceAuxiliar].offset = old_offset;
+            printf("Indice adicionado no final do vetor de indice auxiliar!\n");
+
+            vetorIndiceSecundario[i].offset = countIndiceAuxiliar;
+            printf("Offset Atualizado!\n");
+            
+            break; 
+        }
+    }
+
+    if(achou == 0) {
+        vetorIndiceAuxiliar[countIndiceAuxiliar].Id.ClientId = registerData.Id.ClientId;
+        vetorIndiceAuxiliar[countIndiceAuxiliar].Id.MovieId = registerData.Id.MovieId;
+        vetorIndiceAuxiliar[countIndiceAuxiliar].offset = -1;
+
+        printf("Indice adicionado no final do arquivo de indice auxiliar!\n");
+
+        strcpy(vetorIndiceSecundario[countIndiceSecundario].movieName, registerData.MovieName);
+        vetorIndiceSecundario[countIndiceSecundario].offset = countIndiceAuxiliar;
+
+        printf("Indice adicionado no final do arquivo de indice secundario!\n");
+
+        countIndiceSecundario++;
+
+    }
+
+    countIndiceAuxiliar++;
+    
+    //InsertPrimaryIndex(registerData, offset);
+    //InsertSecondaryIndex(registerData);
 
     fclose(resultFile);
     return 1;
+}
+
+void RefreshFiles() {
+    FILE* resultFile;
+    FILE* primaryIndexFile;
+    FILE* secondaryIndexFile;
+    FILE* auxiliarIndexFile;
+    
+    if(access("dataResult.bin", F_OK ) == 0 ) {
+	    resultFile = fopen("dataResult.bin", "r+b");
+        fwrite(&valid, 1, sizeof(char), resultFile);
+    }
+    fclose(resultFile);
+
+    if(access("indexPrimaryResult.bin", F_OK ) == 0 ) {
+	    primaryIndexFile = fopen("indexPrimaryResult.bin", "r+b");
+	} else {
+        primaryIndexFile = fopen("indexPrimaryResult.bin", "w+b");
+    }
+
+    for(int i = 0; i < countIndicePrincipal; i++) {
+        fwrite(&vetorIndicePrincipal[i], sizeof(vetorIndicePrincipal[i]), 1, primaryIndexFile);
+    }
+    fclose(primaryIndexFile);
+    
+    if(access("indexSecondaryResult.bin", F_OK ) == 0 ) {
+	    secondaryIndexFile = fopen("indexSecondaryResult.bin", "r+b");
+	} else {
+        secondaryIndexFile = fopen("indexSecondaryResult.bin", "w+b");
+    }
+    for(int i = 0; i < countIndiceSecundario; i++) {
+        fwrite(&vetorIndiceSecundario[i], sizeof(vetorIndiceSecundario[i]), 1, secondaryIndexFile);
+    }
+    fclose(secondaryIndexFile);
+    
+    if(access("indexAuxiliarResult.bin", F_OK ) == 0 ) {
+	    auxiliarIndexFile = fopen("indexAuxiliarResult.bin", "r+b");
+	} else {
+        auxiliarIndexFile = fopen("indexAuxiliarResult.bin", "w+b");
+    }
+    for(int i = 0; i < countIndiceAuxiliar; i++) {
+        fwrite(&vetorIndiceAuxiliar[i], sizeof(vetorIndiceAuxiliar[i]), 1, auxiliarIndexFile);
+    }
+    fclose(auxiliarIndexFile);
 }

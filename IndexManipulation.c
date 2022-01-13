@@ -97,6 +97,8 @@ int main(int argc, char const *argv[])
 
         case 4:
             savePosition();
+            RefreshFiles();
+
             printf("Finalizando...\n\n\n");
             repeat = 0;
             break;
