@@ -1,14 +1,6 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-#define true 1;
-#define false 0;
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 #include "code/Insert.c"
 #include "code/Print.c"
 #include "code/Util.c"
