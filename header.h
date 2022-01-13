@@ -39,4 +39,7 @@ void fields(char* string);
 FILE * readPositions();
 void savePosition();
 
+void LoadVetors();
+void CreateIndexs(); 
+
 #endif

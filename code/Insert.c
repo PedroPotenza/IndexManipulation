@@ -154,8 +154,9 @@ int Insert(REGISTER registerData)
 	    resultFile = fopen("dataResult.bin", "r+b");
 	} else {
 	    resultFile = fopen("dataResult.bin", "w+b");
-        fwrite(&invalid, 1, sizeof(char), resultFile);
 	}
+
+    fwrite(&invalid, 1, sizeof(char), resultFile);
 
     int registerSize = 2 * sizeof(int) + strlen(registerData.ClientName) + strlen(registerData.MovieName) + strlen(registerData.Genre) + 5 * sizeof(char);
 

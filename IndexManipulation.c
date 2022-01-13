@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
 
     file = fileOpenRead("busca_s.bin");
 
-    int buscaSecundariaSize = 15;
+    const int buscaSecundariaSize = 15;
     char buscaSecundariaData[buscaSecundariaSize][50];
 
     for (int i = 0; i < buscaSecundariaSize; i++)
@@ -42,6 +42,31 @@ int main(int argc, char const *argv[])
     }
     
     fclose(file);
+
+
+    FILE* resultFile;
+    char valid = '$';
+    char invalid = '*';
+
+    if(access("dataResult.bin", F_OK ) == 0 ) {
+	    resultFile = fopen("dataResult.bin", "r+b");
+    } else {
+       resultFile = fopen("dataResult.bin", "w+b");
+       fwrite(&valid, 1, sizeof(char), resultFile); 
+       rewind(resultFile);
+    }
+
+    char marker;
+    fread(&marker, sizeof(char), 1, resultFile);
+
+    if(marker == valid)
+        LoadVetors();
+
+    if(marker == invalid)
+        CreateIndexs();
+
+    fclose(resultFile);
+
 
     file = readPositions();
 
