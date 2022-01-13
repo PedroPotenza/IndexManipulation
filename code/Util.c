@@ -131,6 +131,25 @@ void selectionSort(INDEX_KEY arr[], int n)
 	
 }
 
+void selectionNameSort(INDEX_NAME arr[], int n)
+{
+    int i, j, min_idx;
+	INDEX_NAME aux;
+
+    for(i = 0; i < n; i++) {
+		for(j = 0; j < n - 1 - i; j++) {
+
+			if(strcmp(arr[j].movieName, arr[j+1].movieName) > 0) {
+				aux = arr[j];
+				arr[j] = arr[j+1];
+				arr[j+1] = aux;
+			}
+			
+		}
+	}
+	
+}
+
 void CreateIndexs() {
 	printf("Recriando os indices e ja carrega os vetores!\n");
 
@@ -220,8 +239,7 @@ void CreateIndexs() {
 	// ===================== ORDENA OS VETORES ========================= //
 
 	selectionSort(vetorIndicePrincipal, countIndicePrincipal);
-
-
+	selectionNameSort(vetorIndiceSecundario, countIndiceSecundario);
 
 	// ===================== ESCREVE OS INDEXES ======================== //
 
