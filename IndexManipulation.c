@@ -21,7 +21,6 @@ int main(int argc, char const *argv[])
     fread(insertData, sizeof(REGISTER), insertSize, file);
     fclose(file);
 
-    //carrega em memoria principal o vetor busca_p
     file = fileOpenRead("busca_p.bin");
 
     KEY* buscaPrimariaData;
@@ -31,8 +30,6 @@ int main(int argc, char const *argv[])
 
     fread(buscaPrimariaData, sizeof(KEY), buscaPrimariaSize, file);
     fclose(file);
-
-    //carrega em memoria principal o vetor busca_s
 
     file = fileOpenRead("busca_s.bin");
 
@@ -76,25 +73,26 @@ int main(int argc, char const *argv[])
         case 1:
             
             inserted = Insert(insertData[inseridos]);
-            if(inserted == 1){
-                inseridos++;
-                savePosition();
-            }
+            // if(inserted == 1){
+            inseridos++;
+            savePosition();
+            // }
             break;
 
         case 2:
             found = PrimarySearch(buscaPrimariaData[buscas_primarias]);
-            if(found == 1){
-                buscas_primarias++;
-                savePosition();
-            }
-
+            
+            buscas_primarias++;
+            savePosition();
+            
             break;
 
         case 3:
+            found = SecondarySearch(buscaSecundariaData[buscas_secundarias]);
             
-            //busca secundaria
-
+            buscas_secundarias++;
+            savePosition();
+            
             break;
 
         case 4:

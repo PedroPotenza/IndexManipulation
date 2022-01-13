@@ -46,9 +46,6 @@ int InsertSecondaryIndex(REGISTER registerData)
     int readMovieSecondaryOffset = 0;
     int carlinhos = 0;
     int endListOffset = -1;
-    
-    int testeOffset = 99;
-    int testeAuxOffset = 11;
 
     if(access("indexSecondaryResult.bin", F_OK ) == 0 ) {
 	    indexFile = fopen("indexSecondaryResult.bin", "r+b");
@@ -62,16 +59,14 @@ int InsertSecondaryIndex(REGISTER registerData)
 	    indexFileAux = fopen("indexAuxiliarResult.bin", "w+b");
 	}
 
-    //printf("\nNome Filme BUSCADO: %s \n", registerData.MovieName);
 
     while(fread(&readMovieName, sizeof(char), 50, indexFile)) {
-        //printf("nome Filme INTERACAO: %s \n", readMovieName);
 
         if (!strcmp(readMovieName, registerData.MovieName)) {
             achou = 1;
             fread(&readMovieAuxiliarOffset, sizeof(int), 1, indexFile);
             fseek(indexFile, -(sizeof(int) + sizeof(readMovieName)), SEEK_CUR);
-            readMovieSecondaryOffset = ftell(indexFile); // -1??
+            readMovieSecondaryOffset = ftell(indexFile);
             break;
     
         } else {
@@ -85,7 +80,7 @@ int InsertSecondaryIndex(REGISTER registerData)
         fseek(indexFileAux, 0, SEEK_END);
 
         //Salva o offset do aux
-        readMovieAuxiliarOffset = ftell(indexFileAux); // -1??
+        readMovieAuxiliarOffset = ftell(indexFileAux);
 
         //Escreve os dados no aux
         fwrite(&registerData.Id.ClientId, 1, sizeof(int), indexFileAux);
@@ -100,7 +95,7 @@ int InsertSecondaryIndex(REGISTER registerData)
 
     } else {
         fseek(indexFileAux, 0, SEEK_END);
-        carlinhos = ftell(indexFileAux); // -1??
+        carlinhos = ftell(indexFileAux);
 
         fwrite(&registerData.Id.ClientId, 1, sizeof(int), indexFileAux);
         fwrite(&registerData.Id.MovieId, 1, sizeof(int), indexFileAux);

@@ -9,7 +9,7 @@ FILE * fileOpenRead(char * filename) {
 	FILE *file = fopen(filename, "rb");
 	
 	if(file == NULL) {
-		printf("The file %s cannot be open.", filename);
+		printf("O arquivo %s nao pode ser aberto.", filename);
 		exit(1);
 	}
 	
