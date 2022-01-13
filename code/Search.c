@@ -48,6 +48,7 @@ int SecondarySearch(char movieName[50])
     KEY* readKey;
     int address;
     int nextAddress = 0;
+    int nextOffset = 0;
     int achou = 0;
 
     int valid = 1;
@@ -58,42 +59,22 @@ int SecondarySearch(char movieName[50])
         if(!strcmp(vetorIndiceSecundario[i].movieName, movieName)) {
             achou = 1;
             
-            nextOffset = 
-        }
-    }
-    
-    // ======================================================================= //
-    
-    while(fread(&MovieNameInteration, sizeof(char), 50, secondaryIndexFile)) {
+            nextOffset = vetorIndiceSecundario[i].offset;
 
-        if(!strcmp(MovieNameInteration, movieName)) {
-            achou = 1;
-            fread(&address, sizeof(int), 1, secondaryIndexFile);
-                        
-            nextAddress = address;
-
-            while(nextAddress != -1) {
-                fseek(auxiliarIndexFile, nextAddress, SEEK_SET);
-
-                fread(&readKey->ClientId, sizeof(int), 1, auxiliarIndexFile);
-                fread(&readKey->MovieId, sizeof(int), 1, auxiliarIndexFile);
-                fread(&nextAddress, sizeof(int), 1, auxiliarIndexFile);
-
-                printf("Codigo do Cliente: %d\n", readKey->ClientId);
-                printf("Codigo do Filme: %d\n", readKey->MovieId);
+            while(nextOffset != -1) {
+                printf("Codigo do Cliente: %d\n", vetorIndiceAuxiliar[nextOffset].Id.ClientId);
+                printf("Codigo do Filme: %d\n", vetorIndiceAuxiliar[nextOffset].Id.MovieId);
                 printf("Nome do Filme: %s\n\n", movieName);
 
-            }          
-        } else {
-            fseek(secondaryIndexFile, sizeof(int), SEEK_CUR);
+                nextOffset = vetorIndiceAuxiliar[nextOffset].offset;
+            }
         }
     }
 
-    fclose(secondaryIndexFile);
-    fclose(auxiliarIndexFile);
     if (achou == 1) {
         return 1;
     } else {
         printf("Nao foi possivel localizar!\n");
     }
+    
 }
