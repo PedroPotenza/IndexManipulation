@@ -4,6 +4,10 @@ int inseridos = 0;
 int buscas_primarias = 0;
 int buscas_secundarias = 0;
 
+INDEX_KEY vetorIndicePrincipal[15];
+INDEX_NAME vetorIndiceSecundario[15];
+INDEX_KEY vetorIndiceAuxiliar[15];
+
 /*-------------------------------------- Utils --------------------------------------*/
 FILE * fileOpenRead(char * filename) {
 	FILE *file = fopen(filename, "rb");

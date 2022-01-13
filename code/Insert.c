@@ -12,6 +12,20 @@ typedef struct s_Register {
     char Genre[50];
 } REGISTER;
 
+typedef struct s_IndexKey {
+
+    KEY Id;
+    int offset;
+
+} INDEX_KEY;
+
+typedef struct s_IndexName {
+
+    char movieName[50];
+    int offset;
+
+}   INDEX_NAME;
+
 int InsertPrimaryIndex(REGISTER registerData, int offset)
 {
     FILE* indexFile;
@@ -122,6 +136,9 @@ int Insert(REGISTER registerData)
 
     char divider = '#';
     char finalizer = '!';
+
+    char valid = '$';
+    char invalid = '*';
     
     FILE* resultFile;
     
@@ -129,6 +146,7 @@ int Insert(REGISTER registerData)
 	    resultFile = fopen("dataResult.bin", "r+b");
 	} else {
 	    resultFile = fopen("dataResult.bin", "w+b");
+        fwrite(&invalid, 1, sizeof(char), resultFile);
 	}
 
     int registerSize = 2 * sizeof(int) + strlen(registerData.ClientName) + strlen(registerData.MovieName) + strlen(registerData.Genre) + 5 * sizeof(char);
