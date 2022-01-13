@@ -96,6 +96,41 @@ void LoadVetors() {
 
 }
 
+void swap(INDEX_KEY *xp, INDEX_KEY *yp)
+{
+    INDEX_KEY temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+void selectionSort(INDEX_KEY arr[], int n)
+{
+    int i, j, min_idx;
+
+    for (i = 0; i < n-1; i++)
+    {
+        min_idx = i;
+        for (j = i+1; j < n; j++)
+          if (arr[j].Id.ClientId < arr[min_idx].Id.ClientId)
+            min_idx = j;
+
+        swap(&arr[min_idx], &arr[i]);
+    }
+
+	for (i = 0; i < n-1; i++)
+	{
+		min_idx = i;
+
+		for (j = i+1; j < n; j++)
+          if (arr[j].Id.ClientId == arr[min_idx].Id.ClientId)
+		  	if(arr[j].Id.MovieId < arr[min_idx].Id.MovieId)
+            	min_idx = j;
+
+        swap(&arr[min_idx], &arr[i]);
+	}
+	
+}
+
 void CreateIndexs() {
 	printf("Recriando os indices e ja carrega os vetores!\n");
 
@@ -184,7 +219,7 @@ void CreateIndexs() {
 
 	// ===================== ORDENA OS VETORES ========================= //
 
-	
+	selectionSort(vetorIndicePrincipal, countIndicePrincipal);
 
 
 
@@ -224,4 +259,6 @@ void CreateIndexs() {
     fclose(auxiliarIndexFile);
 
 }
+
+
 

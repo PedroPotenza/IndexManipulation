@@ -11,11 +11,16 @@ int main() {
         char NomeCli[50];
         char NomeF[50];
         char Genero[50];
-    } vet[4] = {{1, 1, "Joao da Silva", "Filme-1", "Aventura"},              
+    } vet[9] = {{1, 1, "Joao da Silva", "Filme-1", "Aventura"},              
                 {1, 2, "Joao da Silva", "Filme-2", "Aventura"},
 				{1, 3, "Joao da Silva", "Filme-3", "Aventura"},
 				
 				{2, 3, "Pedro Silva e Silva", "Filme-3", "Aventura"},
+                {5, 3, "Tetz Lindo", "Carlinhos: O Filme", "Comedia"},
+                {1, 5, "Potz nao aguenta mais", "Socorro!", "Desespero"},
+                {2, 2, "Manarin aaaaaaa", "Aaaaaa", "Eu nao sei mais"},
+                {4, 1, "Dante faz a boa pelo amor de deus", "Fudeu", "ED2"},
+                {1, 4, "ORDENA FILHO ORDENA", "eu acredito", "vamo que vamo"},
 				};
        
     fd = fopen("insere.bin", "w+b");
@@ -26,8 +31,13 @@ int main() {
     struct busca_p {
         int CodCli;
         int CodF;
-    } vet_bp[2] = {{1,1},
+    } vet_bp[7] = {{1,1},
                    {1,3},
+                   {5,3},
+                   {4,1},
+                   {2,2},
+                   {1,4},
+                   {2,3},
                    };
     
     fd = fopen("busca_p.bin", "w+b");
