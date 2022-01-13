@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
             break;
 
         case 2:
-            found = PrimarySearch(buscaPrimariaData[buscas_primarias]);
+            found = PrimarySearchV2(buscaPrimariaData[buscas_primarias]);
             
             buscas_primarias++;
             savePosition();
